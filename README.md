@@ -23,9 +23,7 @@ Then, to setup a virtual environment:
     
     `pip install -r requirements.txt`
 
-If you need to add a dependency, install it with pip and then run:
-
-    `pip freeze > requirements.txt`
+If you need to add a dependency, install it with pip and then run: `pip freeze > requirements.txt`
 
 Make sure you commit the requirements file afterwards!
 
