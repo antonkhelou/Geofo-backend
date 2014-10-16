@@ -13,19 +13,19 @@ Then, to setup a virtual environment:
 
 * In your checked out directory, run
 
-    virtualenv --no-site-packages proj599_env
+    `virtualenv --no-site-packages proj599_env`
 
 * Enter your virtual environment:
 
-    source proj599_env/bin/activate
+    `source proj599_env/bin/activate`
 
 * Install all the dependencies:
     
-    pip install -r requirements.txt
+    `pip install -r requirements.txt`
 
 If you need to add a dependency, install it with pip and then run:
 
-    pip freeze > requirements.txt
+    `pip freeze > requirements.txt`
 
 Make sure you commit the requirements file afterwards!
 
