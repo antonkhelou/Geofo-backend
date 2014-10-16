@@ -1,0 +1,10 @@
+*.pyc
+*.png
+*.gif
+*.GIF
+*.jpeg
+*.jpg
+
+proj599_env/
+
+.DS_Store
