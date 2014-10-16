@@ -8,3 +8,5 @@
 proj599_env/
 
 .DS_Store
+
+*.sqlite3
