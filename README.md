@@ -32,7 +32,7 @@ Instructions
 
 * Check out the source with `git clone git@github.com:antonkhelou/comp-599-project.git comp-599-project`
 * `cd` into the comp-599-project directory
-* `source comp-599-project/bin/activate` to setup the virtualenv
+* `source proj599_env/bin/activate` to setup the virtualenv
 * `python manage.py runserver`. Access the site at http://localhost:8000
 
 Project layout
