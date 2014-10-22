@@ -43,5 +43,8 @@ Project layout
 * `proj599/`
     * `settings.py` - the project-wide settings. should not need to be changed.
     * `templates/` - all the template files will go under here.
-    * `views/` - includes all views which are mapped with the urls patterns specifies in `urls.py`.
-    * `urls.py` - includes all the urls.py files for each app
+    * `views.py` - includes all views which are mapped with the urls patterns specifies in `urls.py`.
+    * `models.py` - includes all models that we will work with in this project.
+    * `permissions.py` - contains custom permissions used for our RESTful API.
+    * `serializers.py` - specifies the way the model data should be handled through the RESTful interface.
+    * `urls.py` - includes all the urls.py files for each app.
