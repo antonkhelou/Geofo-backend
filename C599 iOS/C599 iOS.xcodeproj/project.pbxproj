@@ -17,6 +17,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		355F72E619FE2ACD00955E40 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 355F72DF19FE2ACC00955E40 /* Alamofire-SwiftyJSON.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A8AFB70F19D1401D0070765E;
+			remoteInfo = AlamofireSwiftyJSON;
+		};
+		355F72E819FE2ACD00955E40 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 355F72DF19FE2ACC00955E40 /* Alamofire-SwiftyJSON.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A8AFB71A19D1401D0070765E;
+			remoteInfo = AlamofireSwiftyJSONTests;
+		};
 		35676F0319FDF7E8001FABA7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 35676EE319FDF7E8001FABA7 /* Project object */;
@@ -27,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		355F72DF19FE2ACC00955E40 /* Alamofire-SwiftyJSON.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Alamofire-SwiftyJSON.xcodeproj"; path = "C599 iOS/Alamofire-SwiftyJSON/Alamofire-SwiftyJSON.xcodeproj"; sourceTree = "<group>"; };
 		35676EEB19FDF7E8001FABA7 /* C599 iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "C599 iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		35676EEF19FDF7E8001FABA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35676EF019FDF7E8001FABA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -58,12 +73,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		355F72E019FE2ACC00955E40 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				355F72E719FE2ACD00955E40 /* AlamofireSwiftyJSON.framework */,
+				355F72E919FE2ACD00955E40 /* AlamofireSwiftyJSONTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		35676EE219FDF7E8001FABA7 = {
 			isa = PBXGroup;
 			children = (
 				35676EED19FDF7E8001FABA7 /* C599 iOS */,
 				35676F0519FDF7E8001FABA7 /* C599 iOSTests */,
 				35676EEC19FDF7E8001FABA7 /* Products */,
+				355F72DF19FE2ACC00955E40 /* Alamofire-SwiftyJSON.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -182,6 +207,12 @@
 			mainGroup = 35676EE219FDF7E8001FABA7;
 			productRefGroup = 35676EEC19FDF7E8001FABA7 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 355F72E019FE2ACC00955E40 /* Products */;
+					ProjectRef = 355F72DF19FE2ACC00955E40 /* Alamofire-SwiftyJSON.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				35676EEA19FDF7E8001FABA7 /* C599 iOS */,
@@ -189,6 +220,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		355F72E719FE2ACD00955E40 /* AlamofireSwiftyJSON.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AlamofireSwiftyJSON.framework;
+			remoteRef = 355F72E619FE2ACD00955E40 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		355F72E919FE2ACD00955E40 /* AlamofireSwiftyJSONTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AlamofireSwiftyJSONTests.xctest;
+			remoteRef = 355F72E819FE2ACD00955E40 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		35676EE919FDF7E8001FABA7 /* Resources */ = {
@@ -415,6 +463,7 @@
 				35676F0E19FDF7E8001FABA7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		35676F0F19FDF7E8001FABA7 /* Build configuration list for PBXNativeTarget "C599 iOSTests" */ = {
 			isa = XCConfigurationList;
@@ -423,6 +472,7 @@
 				35676F1119FDF7E8001FABA7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
