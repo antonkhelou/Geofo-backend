@@ -15,7 +15,8 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     comment_poster = serializers.Field(source='comment_poster.username')
-    parent_comment = serializers.HyperlinkedRelatedField(read_only=True, view_name='comment-detail')
+    parent_comment = serializers.HyperlinkedRelatedField(view_name='comment-detail')
+    thread = serializers.HyperlinkedRelatedField(view_name='thread-detail')
 
     class Meta:
         model = Comment
