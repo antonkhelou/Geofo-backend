@@ -16,11 +16,12 @@ class ThreadSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     comment_poster = serializers.Field(source='comment_poster.username')
     parent_comment = serializers.HyperlinkedRelatedField(view_name='comment-detail')
+    child_comments = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='comment-detail')
     thread = serializers.HyperlinkedRelatedField(view_name='thread-detail')
 
     class Meta:
         model = Comment
-        fields = ('id', 'comment_poster', 'thread', 'parent_comment', 'datetime_posted', 'datetime_modified', 'num_upvotes', 'message')
+        fields = ('id', 'comment_poster', 'thread', 'parent_comment', 'child_comments', 'datetime_posted', 'datetime_modified', 'num_upvotes', 'message')
 
 
 class UserSerializer(serializers.ModelSerializer):
