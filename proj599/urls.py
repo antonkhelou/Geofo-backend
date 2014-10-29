@@ -14,8 +14,8 @@ urlpatterns = patterns('',
     url(r'^threads/(?P<pk>[0-9]+)/comments/$', views.ThreadCommentList.as_view()),
     url(r'^comments/$', views.CommentList.as_view()),
     url(r'^comments/(?P<pk>[0-9]+)/$', views.CommentDetail.as_view(), name='comment-detail'),
-    url(r'^users/$', views.UserList.as_view()),
-    url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view(), name='user-detail'),
+    url(r'^users/$', views.AppUserList.as_view()),
+    url(r'^users/(?P<pk>[0-9]+)/$', views.AppUserDetail.as_view(), name='user-detail'),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)

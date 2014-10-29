@@ -3,11 +3,10 @@ from rest_framework import permissions
 from rest_framework.decorators import permission_classes
 
 from django.http import Http404
-from django.contrib.auth.models import User
 
-from proj599.models import Thread, Comment
-from proj599.serializers import ThreadSerializer, CommentSerializer, UserSerializer
-from proj599.permissions import IsThreadPosterOrReadOnly, IsCommentPosterOrReadOnly
+from proj599.models import Thread, Comment, AppUser
+from proj599.serializers import ThreadSerializer, CommentSerializer, AppUserSerializer
+from proj599.permissions import IsThreadPosterOrReadOnly, IsCommentPosterOrReadOnly, IsUserOrReadOnly
 
 
 class ThreadList(generics.ListCreateAPIView):
@@ -18,7 +17,7 @@ class ThreadList(generics.ListCreateAPIView):
     serializer_class = ThreadSerializer
 
     def pre_save(self, obj):
-        obj.thread_poster = self.request.user
+        obj.thread_poster = AppUser.objects.get(user=self.request.user)
 
 
 class ThreadDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -30,9 +29,6 @@ class ThreadDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
-
-    def pre_save(self, obj):
-        obj.thread_poster = self.request.user
 
 
 class ThreadCommentList(generics.ListAPIView):
@@ -53,7 +49,7 @@ class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 
     def pre_save(self, obj):
-        obj.comment_poster = self.request.user
+        obj.comment_poster = AppUser.objects.get(user=self.request.user)
 
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -66,15 +62,14 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
-    def pre_save(self, obj):
-        obj.comment_poster = self.request.user
+
+class AppUserList(generics.ListCreateAPIView):
+    queryset = AppUser.objects.all()
+    serializer_class = AppUserSerializer
 
 
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class AppUserDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsUserOrReadOnly,)
 
-
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = AppUser.objects.all()
+    serializer_class = AppUserSerializer

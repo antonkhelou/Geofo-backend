@@ -1,8 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+class AppUser(models.Model):
+    user = models.OneToOneField(User)
+    ban_status = models.BooleanField(default=False)
+
 class Thread(models.Model):
-    thread_poster = models.ForeignKey('auth.User', null=True, blank=True, related_name='posted_threads')
+    thread_poster = models.ForeignKey(AppUser, null=True, blank=True, related_name='posted_threads')
     subject = models.CharField(max_length=144)
     num_upvotes = models.IntegerField(default=0)
     num_views = models.IntegerField(default=0)
@@ -15,7 +20,7 @@ class Thread(models.Model):
 
 
 class Comment(models.Model):
-    comment_poster = models.ForeignKey('auth.User', null=True, blank=True, related_name='posted_comments')
+    comment_poster = models.ForeignKey(AppUser, null=True, blank=True, related_name='posted_comments')
     thread = models.ForeignKey(Thread, related_name='thread_comments')
     parent_comment = models.ForeignKey("Comment", null=True, blank=True, related_name='child_comments')
     datetime_posted = models.DateTimeField(auto_now_add=True)
