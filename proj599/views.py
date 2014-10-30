@@ -17,7 +17,8 @@ class ThreadList(generics.ListCreateAPIView):
     serializer_class = ThreadSerializer
 
     def pre_save(self, obj):
-        obj.thread_poster = AppUser.objects.get(user=self.request.user)
+        if not self.request.user.is_anonymous():
+            obj.thread_poster = AppUser.objects.get(user=self.request.user)
 
 
 class ThreadDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -49,7 +50,8 @@ class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 
     def pre_save(self, obj):
-        obj.comment_poster = AppUser.objects.get(user=self.request.user)
+        if not self.request.user.is_anonymous():
+            obj.comment_poster = AppUser.objects.get(user=self.request.user)
 
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
