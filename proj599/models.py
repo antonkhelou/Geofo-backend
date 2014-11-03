@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from geopy.geocoders import Nominatim
+
+geolocator = Nominatim()
+
 
 class AppUser(models.Model):
     user = models.OneToOneField(User)
@@ -17,7 +21,21 @@ class Thread(models.Model):
     link = models.CharField(max_length=2000, blank=True)
     longitude = models.DecimalField(max_digits=10, decimal_places=7)
     latitude = models.DecimalField(max_digits=10, decimal_places=7)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=100, blank=True)
 
+    def save(self, *args, **kwargs):
+        reverse_address = geolocator.reverse("{0},{1}".format(self.longitude, self.latitude)).raw
+
+        # need to check if reversal is succesful otherwise throw error
+
+        address = reverse_address['address']
+        self.city = address['city']
+        self.state = address['state']
+        self.country = address['country']
+
+        super(Thread, self).save(*args, **kwargs)
 
 class Comment(models.Model):
     comment_poster = models.ForeignKey(AppUser, null=True, blank=True, related_name='posted_comments')

@@ -6,11 +6,14 @@ from django.contrib.auth.models import User
 class ThreadSerializer(serializers.ModelSerializer):
     thread_poster = serializers.Field(source='thread_poster.user.username')
     thread_comments = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='comment-detail')
+    city = serializers.Field()
+    state = serializers.Field()
+    country = serializers.Field()
 
     class Meta:
         model = Thread
         fields = ('id', 'thread_poster', 'thread_comments', 'subject', 'num_upvotes', 'num_views', 'datetime_posted', \
-            'datetime_modified', 'message', 'link', 'longitude', 'latitude')
+            'datetime_modified', 'message', 'link', 'longitude', 'latitude', 'city', 'state', 'country')
 
 
 class CommentSerializer(serializers.ModelSerializer):
