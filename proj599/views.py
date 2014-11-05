@@ -20,6 +20,18 @@ class ThreadList(generics.ListCreateAPIView):
         if not self.request.user.is_anonymous():
             obj.thread_poster = AppUser.objects.get(user=self.request.user)
 
+    def get_queryset(self):
+        queryset = Thread.objects.all()
+        longitude = self.request.QUERY_PARAMS.get('longitude', None)
+        latitude = self.request.QUERY_PARAMS.get('latitude', None)
+        
+        if longitude is not None:
+            queryset = queryset.filter(longitude=longitude)
+        if latitude is not None:
+            queryset = queryset.filter(latitude=latitude)
+
+        return queryset
+
 
 class ThreadDetail(generics.RetrieveUpdateDestroyAPIView):
     """
