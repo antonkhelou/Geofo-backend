@@ -24,9 +24,10 @@ class Thread(models.Model):
     city = models.CharField(max_length=100, blank=True)
     state = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100, blank=True)
+    geo_rank = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        reverse_address = geolocator.reverse("{0},{1}".format(self.longitude, self.latitude)).raw
+        reverse_address = geolocator.reverse("{0},{1}".format(self.latitude, self.longitude)).raw
 
         # need to check if reversal is succesful otherwise throw error
 

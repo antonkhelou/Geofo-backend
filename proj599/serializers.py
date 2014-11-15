@@ -9,11 +9,12 @@ class ThreadSerializer(serializers.ModelSerializer):
     city = serializers.Field()
     state = serializers.Field()
     country = serializers.Field()
+    geo_rank = serializers.Field()
 
     class Meta:
         model = Thread
         fields = ('id', 'thread_poster', 'thread_comments', 'subject', 'num_upvotes', 'num_views', 'datetime_posted', \
-            'datetime_modified', 'message', 'link', 'longitude', 'latitude', 'city', 'state', 'country')
+            'datetime_modified', 'message', 'link', 'latitude', 'longitude', 'city', 'state', 'country', 'geo_rank')
 
 
 class CommentSerializer(serializers.ModelSerializer):
