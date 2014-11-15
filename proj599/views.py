@@ -8,6 +8,10 @@ from proj599.models import Thread, Comment, AppUser
 from proj599.serializers import ThreadSerializer, CommentSerializer, AppUserSerializer
 from proj599.permissions import IsThreadPosterOrReadOnly, IsCommentPosterOrReadOnly, IsUserOrReadOnly
 
+from geopy.geocoders import Nominatim
+
+geolocator = Nominatim()
+
 
 class ThreadList(generics.ListCreateAPIView):
     """
@@ -22,15 +26,21 @@ class ThreadList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Thread.objects.all()
+        filtered_queryset = queryset
         longitude = self.request.QUERY_PARAMS.get('longitude', None)
         latitude = self.request.QUERY_PARAMS.get('latitude', None)
         
-        if longitude is not None:
-            queryset = queryset.filter(longitude=longitude)
-        if latitude is not None:
-            queryset = queryset.filter(latitude=latitude)
+        if longitude is not None and latitude is not None:
+            reverse_address = geolocator.reverse("{0},{1}".format(latitude, longitude)).raw
 
-        return queryset
+            # need to check if reversal is succesful otherwise throw error
+            address = reverse_address['address']
+            filtered_queryset = queryset.filter(geo_rank=3) | queryset.filter(geo_rank=2, country=address['country']) | \
+             queryset.filter(geo_rank=1, state=address['state']) | queryset.filter(geo_rank=0, city=address['city'])
+
+
+        return filtered_queryset
+
 
 
 class ThreadDetail(generics.RetrieveUpdateDestroyAPIView):
