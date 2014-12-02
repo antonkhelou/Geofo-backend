@@ -26,7 +26,6 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -37,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'djcelery',
     'proj599',
 )
 
@@ -83,3 +83,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Celery related settings
+
+import djcelery
+djcelery.setup_loader()
+
+
+COUNTRY_TASK_PERIOD='hours'
+STATE_TASK_PERIOD='hours'
+CITY_TASK_PERIOD='hours'
+
+COUNTRY_TASK_EVERY=4
+STATE_TASK_EVERY=2
+CITY_TASK_EVERY=1
