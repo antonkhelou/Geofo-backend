@@ -26,11 +26,12 @@ def update_city_geo_ranks(city):
 
     eligible_threads = sorted_scores[:int(math.ceil(len(sorted_scores)/4.0))]
 
-    # for elig_thread in eligible_threads:
-    #     elig_thread[0].geo_rank = 1
-
     print sorted_scores
     print eligible_threads
+
+    for elig_thread in eligible_threads:
+        elig_thread[0].geo_rank = 1
+        elig_thread[0].save()
 
 
 @task()
@@ -49,11 +50,12 @@ def update_state_geo_ranks(state):
 
     eligible_threads = sorted_scores[:int(math.ceil(len(sorted_scores)/4.0))]
 
-    # for elig_thread in eligible_threads:
-    #     elig_thread[0].geo_rank = 2
-
     print sorted_scores
     print eligible_threads
+
+    for elig_thread in eligible_threads:
+         elig_thread[0].geo_rank = 2
+         elig_thread[0].save()
 
 @task()
 def update_country_geo_ranks(country):
@@ -71,8 +73,9 @@ def update_country_geo_ranks(country):
 
     eligible_threads = sorted_scores[:int(math.ceil(len(sorted_scores)/4.0))]
 
-    # for elig_thread in eligible_threads:
-    #     elig_thread[0].geo_rank = 3
-
     print sorted_scores
     print eligible_threads
+
+    for elig_thread in eligible_threads:
+         elig_thread[0].geo_rank = 3
+         elig_thread[0].save()
