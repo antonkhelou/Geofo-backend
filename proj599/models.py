@@ -69,6 +69,15 @@ class Thread(models.Model):
         super(Thread, self).save(*args, **kwargs)
 
 
+# class ThreadUpvote(models.Model):
+#     upvote_user = models.ForeignKey(AppUser, null=True, blank=True)
+#     thread = models.OneToOneField(Thread, null=False)
+#     datetime_upvoted = models.DateTimeField(auto_now_add=True)
+    # city = models.CharField(max_length=100, blank=True)
+    # state = models.CharField(max_length=100, blank=True)
+    # country = models.CharField(max_length=100, blank=True)
+
+
 class Comment(models.Model):
     comment_poster = models.ForeignKey(AppUser, null=True, blank=True, related_name='posted_comments')
     thread = models.ForeignKey(Thread, related_name='thread_comments')
@@ -77,6 +86,14 @@ class Comment(models.Model):
     datetime_modified = models.DateTimeField(auto_now=True)
     num_upvotes = models.IntegerField()
     message = models.CharField(max_length=10000, blank=True)
+
+# class CommentUpvote(models.Model):
+#     upvote_user = models.ForeignKey(AppUser, null=True, blank=True)
+#     comment = models.OneToOneField(Comment, null=False)
+#     datetime_upvoted = models.DateTimeField(auto_now_add=True)
+    # city = models.CharField(max_length=100, blank=True)
+    # state = models.CharField(max_length=100, blank=True)
+    # country = models.CharField(max_length=100, blank=True)
 
 
 class GeoRankerTaskScheduler(models.Model):
