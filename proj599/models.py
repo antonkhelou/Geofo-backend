@@ -32,39 +32,41 @@ class Thread(models.Model):
     geo_rank = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        reverse_address = geolocator.reverse("{0},{1}".format(self.latitude, self.longitude)).raw
+        if self.pk is None:
+            reverse_address = geolocator.reverse("{0},{1}".format(self.latitude, self.longitude)).raw
 
-        # need to check if reversal is succesful otherwise throw error
+            # need to check if reversal is succesful otherwise throw error
 
-        address = reverse_address['address']
-        self.city = address['city']
-        self.state = address['state']
-        self.country = address['country']
+            address = reverse_address['address']
+            self.city = address['city']
+            self.state = address['state']
+            self.country = address['country']
 
 
-        #check if task exists for city, state and country
-        geo_schedulers_objects = GeoRankerTaskScheduler.objects
+            #check if task exists for city, state and country
+            geo_schedulers_objects = GeoRankerTaskScheduler.objects
 
-        grts = None
+            if len(geo_schedulers_objects.filter(city=address['city'])) == 0:
+                print u"No existant georank tasks for {0} city. Creating task.".format(address['city'])
+                grts = GeoRankerTaskScheduler.schedule_every(task_name='proj599.tasks.update_city_geo_ranks', period=settings.CITY_TASK_PERIOD, every=settings.CITY_TASK_EVERY, args=[address['city'],])
+                grts.city = address['city']
+                grts.start()
+                grts.save()
 
-        if len(geo_schedulers_objects.filter(city=address['city'])) == 0:
-            print u"No existant georank tasks for {0} city. Creating task.".format(address['city'])
-            grts = GeoRankerTaskScheduler.schedule_every(task_name='proj599.tasks.update_city_geo_ranks', period=settings.CITY_TASK_PERIOD, every=settings.CITY_TASK_EVERY, args=[address['city'],])
-            grts.city = address['city']
+            if len(geo_schedulers_objects.filter(state=address['state'])) == 0:
+                print u"No existant georank tasks for {0} state. Creating task.".format(address['state'])
+                grts = GeoRankerTaskScheduler.schedule_every(task_name='proj599.tasks.update_state_geo_ranks', period=settings.STATE_TASK_PERIOD, every=settings.STATE_TASK_EVERY, args=[address['state'],])
+                grts.state = address['state']
+                grts.start()
+                grts.save()
 
-        if len(geo_schedulers_objects.filter(state=address['state'])) == 0:
-            print u"No existant georank tasks for {0} state. Creating task.".format(address['state'])
-            grts = GeoRankerTaskScheduler.schedule_every(task_name='proj599.tasks.update_state_geo_ranks', period=settings.STATE_TASK_PERIOD, every=settings.STATE_TASK_EVERY, args=[address['state'],])
-            grts.state = address['state']
+            if len(geo_schedulers_objects.filter(country=address['country'])) == 0:
+                print u"No existant georank tasks for {0} country. Creating task.".format(address['country'])
+                grts = GeoRankerTaskScheduler.schedule_every(task_name='proj599.tasks.update_country_geo_ranks', period=settings.COUNTRY_TASK_PERIOD, every=settings.COUNTRY_TASK_EVERY, args=[address['country'],])
+                grts.country = address['country']
+                grts.start()
+                grts.save()
 
-        if len(geo_schedulers_objects.filter(country=address['country'])) == 0:
-            print u"No existant georank tasks for {0} country. Creating task.".format(address['country'])
-            grts = GeoRankerTaskScheduler.schedule_every(task_name='proj599.tasks.update_country_geo_ranks', period=settings.COUNTRY_TASK_PERIOD, every=settings.COUNTRY_TASK_EVERY, args=[address['country'],])
-            grts.country = address['country']
-
-        if grts is not None:
-            grts.start()
-            grts.save()
 
         super(Thread, self).save(*args, **kwargs)
 
