@@ -1,15 +1,13 @@
 from rest_framework import serializers
-from proj599.models import Thread, Comment, AppUser
+from proj599.models import Thread, Comment, AppUser, ThreadUpvote, CommentUpvote
 from django.contrib.auth.models import User
 
 
 class ThreadSerializer(serializers.ModelSerializer):
     thread_poster = serializers.Field(source='thread_poster.user.username')
     thread_comments = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='comment-detail')
-    city = serializers.Field()
-    state = serializers.Field()
-    country = serializers.Field()
-    geo_rank = serializers.Field()
+    #geo_rank = serializers.Field()
+    num_upvotes = serializers.Field()
 
     class Meta:
         model = Thread
@@ -17,15 +15,35 @@ class ThreadSerializer(serializers.ModelSerializer):
             'datetime_modified', 'message', 'link', 'latitude', 'longitude', 'city', 'state', 'country', 'geo_rank')
 
 
+class ThreadUpvoteSerializer(serializers.ModelSerializer):
+    upvote_user = serializers.Field(source='upvote_user.user.username')
+    upvoted_thread = serializers.HyperlinkedRelatedField(view_name='thread-detail')
+
+    class Meta:
+        model = ThreadUpvote
+        fields = ('id', 'upvote_user', 'upvoted_thread', 'datetime_upvoted', 'city', 'state', 'country')
+
+
 class CommentSerializer(serializers.ModelSerializer):
     comment_poster = serializers.Field(source='comment_poster.user.username')
     parent_comment = serializers.HyperlinkedRelatedField(view_name='comment-detail', required=False)
     child_comments = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='comment-detail')
     thread = serializers.HyperlinkedRelatedField(view_name='thread-detail')
+    num_upvotes = serializers.Field()
 
     class Meta:
         model = Comment
         fields = ('id', 'comment_poster', 'thread', 'parent_comment', 'child_comments', 'datetime_posted', 'datetime_modified', 'num_upvotes', 'message')
+
+
+class CommentUpvoteSerializer(serializers.ModelSerializer):
+    upvote_user = serializers.Field(source='upvote_user.user.username')
+    upvoted_comment = serializers.HyperlinkedRelatedField(view_name='comment-detail')
+
+    class Meta:
+        model = CommentUpvote
+        fields = ('id', 'upvote_user', 'upvoted_comment', 'datetime_upvoted', 'city', 'state', 'country')
+
 
 class AppUserSerializer(serializers.ModelSerializer):
     posted_threads = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='thread-detail')

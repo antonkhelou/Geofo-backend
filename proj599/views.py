@@ -6,11 +6,10 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 
-from proj599.models import Thread, Comment, AppUser
-# from proj599.models import Thread, Comment, AppUser, ThreadUpvote, CommentUpvote
-from proj599.serializers import ThreadSerializer, CommentSerializer, AppUserSerializer
+from proj599.models import Thread, Comment, AppUser, ThreadUpvote, CommentUpvote
+from proj599.serializers import ThreadSerializer, CommentSerializer, AppUserSerializer, ThreadUpvoteSerializer, CommentUpvoteSerializer
 from proj599.permissions import IsThreadPosterOrReadOnly, IsCommentPosterOrReadOnly, IsUserOrReadOnly
 
 from geopy.geocoders import Nominatim
@@ -32,66 +31,28 @@ class ThreadList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = Thread.objects.all()
         filtered_queryset = queryset
-        longitude = self.request.QUERY_PARAMS.get('longitude', None)
-        latitude = self.request.QUERY_PARAMS.get('latitude', None)
-        
-        if longitude is not None and latitude is not None:
-            reverse_address = geolocator.reverse("{0},{1}".format(latitude, longitude)).raw
 
-            # need to check if reversal is succesful otherwise throw error
-            address = reverse_address['address']
-            filtered_queryset = queryset.filter(geo_rank=3) | queryset.filter(geo_rank=2, country=address['country']) | \
-                queryset.filter(geo_rank=1, state=address['state']) | queryset.filter(geo_rank=0, city=address['city'])
+        city = self.request.QUERY_PARAMS.get('city', None)
+        state = self.request.QUERY_PARAMS.get('state', None)
+        country = self.request.QUERY_PARAMS.get('country', None)
 
+        if city is not None and state is not None and country is not None:
+            filtered_queryset = queryset.filter(geo_rank=3) | queryset.filter(geo_rank=2, country=country) | \
+                queryset.filter(geo_rank=1, state=state) | queryset.filter(geo_rank=0, city=city)
 
         return filtered_queryset
 
 
-@api_view(['POST'])
-def upvote_thread(request, pk):
+class ThreadUpvoteList(generics.ListCreateAPIView):
+    """
+    List all thread upvotes, or create a new thread upvote.
+    """
+    queryset = ThreadUpvote.objects.all()
+    serializer_class = ThreadUpvoteSerializer
 
-    try:
-        thread = Thread.objects.get(pk=pk)
-    except Thread.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    thread.num_upvotes = thread.num_upvotes + 1
-
-    thread.save()
-
-    # try:
-    #     if not self.request.user.is_anonymous():
-    #         user = AppUser.objects.get(user=self.request.user)
-    # except AppUser.DoesNotExist:
-    #     return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-    #     if user:
-    #         thread_upvote = ThreadUpvote.objects.filter(thread=thread, user=user)
-
-    #     if len(thread_upvote) == 0: #no upvotes for
-    #         if user:
-    #             new_thread_upvote = ThreadUpvote(thread=thread, upvote_user=user)
-    #         else:
-    #             new_thread_upvote = ThreadUpvote(thread=thread)
-
-    #         longitude = self.request.QUERY_PARAMS.get('longitude', None)
-    #         latitude = self.request.QUERY_PARAMS.get('latitude', None)
-            
-    #         if longitude is not None and latitude is not None:
-    #             reverse_address = geolocator.reverse("{0},{1}".format(latitude, longitude)).raw
-
-    #             # need to check if reversal is succesful otherwise throw error
-    #             address = reverse_address['address']
-    #             new_thread_upvote.city = address['city']
-    #             new_thread_upvote.state = address['state']
-    #             new_thread_upvote.country = address['country']
-
-    #         new_thread_upvote.save()
-
-
-    return Response(status=status.HTTP_200_OK)
-
+    def pre_save(self, obj):
+        if not self.request.user.is_anonymous():
+            obj.upvote_user = AppUser.objects.get(user=self.request.user)
 
 
 class ThreadDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -127,48 +88,16 @@ class CommentList(generics.ListCreateAPIView):
             obj.comment_poster = AppUser.objects.get(user=self.request.user)
 
 
-@api_view(['POST'])
-def upvote_comment(request, pk):
-    try:
-        comment = Comment.objects.get(pk=pk)
-    except Comment.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+class CommentUpvoteList(generics.ListCreateAPIView):
+    """
+    List all thread upvotes, or create a new thread upvote.
+    """
+    queryset = CommentUpvote.objects.all()
+    serializer_class = CommentUpvoteSerializer
 
-    comment.num_upvotes = comment.num_upvotes + 1
-
-    comment.save()
-
-    # try:
-    #     if not self.request.user.is_anonymous():
-    #         user = AppUser.objects.get(user=self.request.user)
-    # except AppUser.DoesNotExist:
-    #     return Response(status=status.HTTP_404_NOT_FOUND)
-
-    #     if user:
-    #         comment_upvote = CommentUpvote.objects.filter(thread=thread, user=user)
-
-    #     if len(comment_upvote) == 0: #no upvotes for
-    #         if user:
-    #             new_comment_upvote = CommentUpvote(thread=thread, upvote_user=user)
-    #         else:
-    #             new_comment_upvote = CommentUpvote(thread=thread)
-
-    #         longitude = self.request.QUERY_PARAMS.get('longitude', None)
-    #         latitude = self.request.QUERY_PARAMS.get('latitude', None)
-            
-    #         if longitude is not None and latitude is not None:
-    #             reverse_address = geolocator.reverse("{0},{1}".format(latitude, longitude)).raw
-
-    #             # need to check if reversal is succesful otherwise throw error
-    #             address = reverse_address['address']
-    #             new_comment_upvote.city = address['city']
-    #             new_comment_upvote.state = address['state']
-    #             new_comment_upvote.country = address['country']
-
-    #         new_comment_upvote.save()
-
-
-    return Response(status=status.HTTP_200_OK)
+    def pre_save(self, obj):
+        if not self.request.user.is_anonymous():
+            obj.upvote_user = AppUser.objects.get(user=self.request.user)
 
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
