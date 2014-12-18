@@ -37,6 +37,7 @@ Instructions
 * Check out the source with `git clone git@github.com:antonkhelou/comp-599-project.git comp-599-project`
 * `cd` into the comp-599-project directory
 * `source proj599_env/bin/activate` to setup the virtualenv
+* `python manage.py syncdb`. This will generate a db.sqlite file containing the database.
 * `python manage.py runserver`. Access the site at http://localhost:8000
 * `sudo rabbitmq-server`. Make sure you have `PATH=$PATH:/usr/local/sbin` added to your path. The broker responsible for holding and sending tasks.
 * `python manage.py celery beat -S djcelery.schedulers.DatabaseScheduler`. This is to launch the beat process which will look for changes inside the database and run tasks periodically
@@ -45,7 +46,7 @@ Instructions
 * Adjust period task rate of execution inside proj599/settings.py for local development
 
 Project layout
--------------
+--------------
 
 * `manage.py` - comes with Django. Not modified.
 * `readme.md`
@@ -58,3 +59,28 @@ Project layout
     * `permissions.py` - contains custom permissions used for our RESTful API.
     * `serializers.py` - specifies the way the model data should be handled through the RESTful interface.
     * `urls.py` - includes all the urls.py files for each app.
+
+
+REST API
+-------------
+Once the database is created and the server is running (the other components AMQP components are not required for this)
+
+* `localhost:8000/threads/`
+* `localhost:8000/threads/<pk>/`
+* `localhost:8000/threads/<pk>/comments/`
+* `localhost:8000/threadupvote/`
+* `localhost:8000/comments/`
+* `localhost:8000/comments/<pk>/`
+* `localhost:8000/commentupvote/`
+* `localhost:8000/users/`
+* `localhost:8000/users/<pk>/`
+
+The above are all the standard API hooks for the models. Full HTTP methods support. If you want raw JSON data, add `?format=json` to the end of the url.
+
+* `localhost:8000/api-token-auth/`
+
+The above supports POST only and requires, `username` and `password` attributes and returns the API authentication token.
+
+* `localhost:8000/admin/`
+
+To view the admin page and the PeriodicTasks.
