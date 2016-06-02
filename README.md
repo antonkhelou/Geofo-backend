@@ -1,6 +1,6 @@
 Geofo-backend
 ================
-[![Build Status](https://travis-ci.com/antonkhelou/Geofo-backend.svg?token=dJ7Uk3fcs3ZRM6R6XdYv&branch=master)](https://travis-ci.com/antonkhelou/Geofo-backend)
+[![Build Status](https://travis-ci.org/antonkhelou/Geofo-backend.svg?branch=master)](https://travis-ci.org/antonkhelou/Geofo-backend)
 
 Development
 -----------
